@@ -1,0 +1,23 @@
+
+body {
+    margin: 0;
+}
+
+.website {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+}
+
+.strings {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.string {
+    width: 10px;
+    background-color: gray;
+}
