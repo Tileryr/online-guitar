@@ -1,24 +1,42 @@
 
 body {
+    background-color: white;
     margin: 0;
 }
 
 .website {
     height: 100vh;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
 }
 
+.fretboard {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    background-color: aqua;
+}
 .strings {
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: repeat(6, auto);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 30px;
     justify-content: space-between;
-    gap: 20px;
 }
 
 .string {
-    width: 10px;
+    width: 15px;
+    height: 400px;
     background-color: gray;
 }
+
+/* .circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(100, 100, 100, 100);
+    grid-column: 1 / -1;
+} */

@@ -1,8 +1,6 @@
 const note_selector = document.querySelector(".notes_picker");
+const fretboard = document.querySelector(".fretboard")
 const note_selectors = Array.from(note_selector.querySelectorAll("input"));
-
-var spaceDown = false;
-
 const numberToNote = {
   1 : "-E",
   2 : "-F",
@@ -43,26 +41,42 @@ const numberToNote = {
   37 : "++E",
 }
 
+var spaceDown = false;
+
 var fretNumbers = {
   1: "",
-  6: 6,
-  11: 4,
-  16: 6,
-  20: 6,
+  6: 2,
+  11: 2,
+  16: "",
+  20: "",
   25: ""
 }
+
+function drawGrid() {
+  for (let i = 0; i < 73; i++) {
+    let div = document.createElement("div");
+    div.setAttribute("id", `fret_${i}`)
+    fretboard.append(div);
+    div.addEventListener("mousedown", chooseFret.bind(div, i));
+  }
+}
+
+function chooseFret(fret) {
+  alert(fret)
+}
+drawGrid();
 
 function mouseOverString(e) {
   if(spaceDown) {play(this.dataset.note)};
 }
 
-function play(string) {
+function play(string) { 
   const fretNumber = fretNumbers[string];
   const note = +string + +fretNumber;
   if(!numberToNote[note]) {
     return
   }
-  const letterNote = numberToNote[note] ;
+  const letterNote = numberToNote[note];
   console.log(letterNote)
   const audio = new Audio(`./sounds/${encodeURIComponent(letterNote)}.ogg`);
   audio.play();
@@ -73,7 +87,7 @@ function saveChord() {
     console.log(selector);
     fretNumbers[selector.dataset.string] = selector.value;
   });
-  console.log(fretNumbers)
+  // console.log(fretNumbers)
 }
 
 document.addEventListener("keydown", e => {spaceDown = e.key === " " ? true : false;});
