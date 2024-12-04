@@ -8,19 +8,32 @@
 </head>
 <body>
     <div class="website">
-        <div class="chord">
-            <div class="chord_picker"></div>
+        <div draggable="false" class="chord_picker">
             <div class="note_picker"></div>
         </div>
-        <div class="strings">
-            <div class="string" data-note="-E"></div>
-            <div class="string" data-note="-A"></div>
-            <div class="string" data-note="-D"></div>
-            <div class="string" data-note="G"></div>
-            <div class="string" data-note="B"></div>
-            <div class="string" data-note="+E"></div>
+        <div draggable="false" class="strings">
+            <div draggable="false" class="string" data-note=1></div>
+            <div draggable="false" class="string" data-note=6></div>
+            <div draggable="false" class="string" data-note=11></div>
+            <div draggable="false" class="string" data-note=16></div>
+            <div draggable="false" class="string" data-note=20></div>
+            <div draggable="false" class="string" data-note=25></div>
         </div>
-        <div class="instrument"></div>
+        <div draggable="false" class="notes_picker">
+            <label for="-E">E</label>
+            <label for="-A">A</label>
+            <label for="-D">D</label>
+            <label for="G">G</label>
+            <label for="B">B</label>
+            <label for="+E">E</label>
+            <input id="-E" type="text" data-string=1>
+            <input id="-A" type="text" data-string=6>
+            <input id="-D" type="text" data-string=11>
+            <input id="G" type="text" data-string=16>
+            <input id="B" type="text" data-string=20>
+            <input id="+E" type="text" data-string=25>
+            <button onclick="saveChord()">SAVE</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

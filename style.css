@@ -13,6 +13,7 @@ body {
 .strings {
     display: grid;
     grid-auto-flow: column;
+    grid-template-columns: repeat(6, auto);
     justify-content: space-between;
     gap: 20px;
 }
