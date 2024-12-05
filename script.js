@@ -1,5 +1,5 @@
 const note_selector = document.querySelector(".notes_picker");
-const fretboard = document.querySelector(".fretboard")
+const fretHolders = document.querySelectorAll(".fret-holder")
 const note_selectors = Array.from(note_selector.querySelectorAll("input"));
 const numberToNote = [
   "-E",
@@ -41,8 +41,6 @@ const numberToNote = [
   "++E",
 ]
 
-var spaceDown = false;
-
 var fretNumbers = [
   0,
   2,
@@ -51,29 +49,35 @@ var fretNumbers = [
   0,
   0
 ]
-
+// rewriting fret code so flexbox for each string
 function drawGrid() {
-  for (let i = 0; i < 72; i++) {
-    let div = document.createElement("div");
-    let string = i % 6;
-    let fretNumber = Math.floor((i/6)+1);
-    div.setAttribute("id", `fret_${i}`);
-    div.setAttribute("class", "fret");
-    fretboard.append(div);
-    div.addEventListener("mousedown", chooseFret.bind(div, fretNumber, string));
-  }
+  fretHolders.forEach((fretHolder, index) => {
+    // console.log(index)
+    for (let i = 1; i < 13; i++) {
+      let div = document.createElement("div");
+      let string = index;
+      let fretNumber = i;
+      div.setAttribute("id", `fret_${i}`);
+      div.setAttribute("class", "fret");
+      fretHolder.append(div);
+      div.addEventListener("mousedown", chooseFret.bind(div, fretNumber, string));
+    }
+  });
 }
 
 function chooseFret(fret, string) {
   fretNumbers[string] = fret;
-  console.log(fretNumbers)
   let circle = document.createElement("div")
   let letter = document.createElement("span")
   circle.setAttribute("class", "fret_circle")
   letter.setAttribute("class", "text")
   letter.textContent = "G"
   circle.append(letter)
+  // Remove old ones
+  let oldCircles = this.parentNode.querySelectorAll(".fret_circle")
+  oldCircles.forEach(fretCircle => fretCircle.remove())
   this.append(circle)
+  console.log(fretNumbers)
 }
 
 drawGrid();
