@@ -52,8 +52,7 @@ var fretNumbers = [
 // rewriting fret code so flexbox for each string
 function drawGrid() {
   fretHolders.forEach((fretHolder, index) => {
-    // console.log(index)
-    for (let i = 1; i < 13; i++) {
+    for (let i = 0; i < 13; i++) {
       let div = document.createElement("div");
       let string = index;
       let fretNumber = i;
