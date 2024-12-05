@@ -81,8 +81,8 @@ function chooseFret(fret, string) {
 
 drawGrid();
 
-function mouseOverString(e) {
-  play(this.dataset.note, this.dataset.string)
+function mouseOverString(string) {
+  
 }
 
 function play(note, string) { 
@@ -103,5 +103,15 @@ function saveChord() {
   // console.log(fretNumbers)
 }
 
-const strings = document.querySelectorAll(".string")
-strings.forEach(string => string.addEventListener("mouseover", mouseOverString))
+const strings = document.querySelectorAll(".string");
+document.addEventListener("pointermove", (e) => {
+  const coalescedEvents = e.getCoalescedEvents();
+  for (let coalescedEvent of coalescedEvents) {
+    let element = document.elementFromPoint(coalescedEvent.clientX, coalescedEvent.clientY)
+    if(element.classList.contains("string")) {
+      play(element.dataset.note, element.dataset.string)
+      break
+    }
+  }
+});
+// strings.forEach(string => string.addEventListener("pointerover", mouseOverString))
