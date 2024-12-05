@@ -44,9 +44,7 @@ const numberToNote = [
 var spaceDown = false;
 
 var fretNumbers = [
-  //6th string
   0,
-  // continue from 1
   2,
   2,
   0,
@@ -69,10 +67,13 @@ function drawGrid() {
 function chooseFret(fret, string) {
   fretNumbers[string] = fret;
   console.log(fretNumbers)
-  // let circle = document.createElement("div")
-  // circle.setAttribute("class", "fret_circle")
-  // let letter = document.createElement("span")
-  // letter.textContent("")
+  let circle = document.createElement("div")
+  let letter = document.createElement("span")
+  circle.setAttribute("class", "fret_circle")
+  letter.setAttribute("class", "text")
+  letter.textContent = "G"
+  circle.append(letter)
+  this.append(circle)
 }
 
 drawGrid();
