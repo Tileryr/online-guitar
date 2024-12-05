@@ -14,10 +14,33 @@ body {
 }
 
 .fretboard {
+    align-self: stretch;
+    justify-self: stretch;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(12, 1fr);
     background-color: aqua;
+}
+
+.fret {
+    box-sizing: border-box;
+    color: gray;
+    border-bottom: solid black 2px;
+}
+
+.fret_circle {
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
 }
 .strings {
     display: grid;
