@@ -47,37 +47,32 @@ var fretNumbers = [
   //6th string
   0,
   // continue from 1
-  0,
-  0,
+  2,
+  2,
   0,
   0,
   0
 ]
 
 function drawGrid() {
-  for (let i = 1; i < 73; i++) {
+  for (let i = 0; i < 72; i++) {
     let div = document.createElement("div");
-    let note
-    let string = i % 6
-    let fretNumber = Math.ceil(i/6)
-    console.log(fretNumbers[2])
-    // switch (string) {
-    //   case 0:
-    //     note = 25
-    // }
-
-    div.setAttribute("id", `fret_${i}`)
-    div.setAttribute("class", "fret")
+    let string = i % 6;
+    let fretNumber = Math.floor((i/6)+1);
+    div.setAttribute("id", `fret_${i}`);
+    div.setAttribute("class", "fret");
     fretboard.append(div);
-    div.addEventListener("mousedown", chooseFret.bind(div, i, note, string));
+    div.addEventListener("mousedown", chooseFret.bind(div, fretNumber, string));
   }
 }
 
-function chooseFret(fret) {
-  let circle = document.createElement("div")
-  circle.setAttribute("class", "fret_circle")
-  let letter = document.createElement("span")
-  letter.textContent("")
+function chooseFret(fret, string) {
+  fretNumbers[string] = fret;
+  console.log(fretNumbers)
+  // let circle = document.createElement("div")
+  // circle.setAttribute("class", "fret_circle")
+  // let letter = document.createElement("span")
+  // letter.textContent("")
 }
 
 drawGrid();
@@ -88,10 +83,8 @@ function mouseOverString(e) {
 
 function play(note, string) { 
   const fretNumber = fretNumbers[string];
-  let numberNote = +string + +fretNumber;
-  if(!numberToNote[note]) {
-    return
-  }
+  let numberNote = +note + +fretNumber;
+  if(!numberToNote[note]) {return}
   const letterNote = numberToNote[numberNote];
   console.log(letterNote)
   const audio = new Audio(`./sounds/${encodeURIComponent(letterNote)}.ogg`);
