@@ -42,26 +42,24 @@ const numberToNote = [
 ]
 var fretNumbers = [
   0,
-  2,
-  2,
+  0,
+  0,
   0,
   0,
   0
 ]
 var timers = [...Array(6)]
 
-// writing debounce so ears stay healthy
 function debounce(func, timeout, string) {
-  console.log(timers)
   return (...args) => {
     if(!timers[string]) {
-      // console.log("did it")
       func.apply(this, args)
-    }
-    clearTimeout(timers[string])
-    timers[string] = setTimeout(() => {
+
+      clearTimeout(timers[string])
+      timers[string] = setTimeout(() => {
       timers[string] = undefined
-    }, timeout)
+      }, timeout)
+    }
   }
 }
 
@@ -118,15 +116,16 @@ function saveChord() {
   // console.log(fretNumbers)
 }
 
-const strings = document.querySelectorAll(".string");
-
+let previousX;
 document.addEventListener("pointermove", (e) => {
   const coalescedEvents = e.getCoalescedEvents();
   for (let coalescedEvent of coalescedEvents) {
-    let element = document.elementFromPoint(coalescedEvent.clientX, coalescedEvent.clientY)
-    if(element.classList.contains("string")) {
-      const debouncedPlay = debounce(play, 100, element.dataset.string)
-      debouncedPlay(element.dataset.note, element.dataset.string)
-    }
-  }
+     let element = document.elementFromPoint(coalescedEvent.clientX, coalescedEvent.clientY);
+     // if string and coming from left
+     if(element.classList.contains("string") && coalescedEvent.clientX > previousX) {
+       const debouncedPlay = debounce(play, 100, element.dataset.string);
+       debouncedPlay(element.dataset.note, element.dataset.string);
+     }
+     previousX = coalescedEvent.clientX
+   }
 });
