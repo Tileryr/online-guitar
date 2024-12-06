@@ -1,5 +1,4 @@
 const fretHolders = document.querySelectorAll(".fret-holder")
-
 const numberToNote = [
   "-E",
   "-F",
@@ -39,17 +38,6 @@ const numberToNote = [
   "+D#",
   "++E",
 ]
-var fretNumbers = [
-  0,
-  0,
-  0,
-  0,
-  0,
-  0
-]
-
-var timers = [...Array(6)]
-
 var stringData = [
   { note: 0, fretNumber: 0, timer: undefined},
   { note: 5, fretNumber: 0, timer: undefined},
@@ -58,6 +46,13 @@ var stringData = [
   { note: 19, fretNumber: 0, timer: undefined},
   { note: 24, fretNumber: 0, timer: undefined},
 ]
+
+var primaryMouseButtonDown = false;
+
+function setPrimaryButtonState(e) {
+  var flags = e.buttons !== undefined ? e.buttons : e.which;
+  primaryMouseButtonDown = (flags & 1) === 1;
+}
 
 function debounce(func, timeout, string) {
   return (...args) => {
@@ -92,38 +87,55 @@ function chooseFret(fret, string) {
   let letter = document.createElement("span")
   circle.setAttribute("class", "fret_circle")
   letter.setAttribute("class", "text")
-  letter.textContent = ""
+  stringInfo = stringData[string]
+  console.log(numberToNote[stringInfo.note + stringInfo.fretNumber])
+  letter.textContent = numberToNote[stringInfo.note + stringInfo.fretNumber].replace(/\+|-/g, "")
   circle.append(letter)
-  // Remove old ones
+
   let oldCircles = this.parentNode.querySelectorAll(".fret_circle")
   oldCircles.forEach(fretCircle => fretCircle.remove())
   this.append(circle)
-  console.log(fretNumbers)
 }
 
 drawGrid();
 
 function play(string) {
-  console.log(string)
   const fretNumber = stringData[string].fretNumber;
   const numberNote = stringData[string].note + fretNumber;
-  // if(!numberToNote[numberNote]) {return}
   const letterNote = numberToNote[numberNote];
-  // console.log(letterNote)
+  console.log(letterNote)
   const audio = new Audio(`./sounds/${encodeURIComponent(letterNote)}.ogg`);
   audio.play();
 }
 
 let previousX;
+let inString;
+
 document.addEventListener("pointermove", (e) => {
+  setPrimaryButtonState(e)
   const coalescedEvents = e.getCoalescedEvents();
   for (let coalescedEvent of coalescedEvents) {
-     let element = document.elementFromPoint(coalescedEvent.clientX, coalescedEvent.clientY);
+    let element = document.elementFromPoint(coalescedEvent.clientX, coalescedEvent.clientY);
+    if(!element) {return}
+    if(element.classList.contains("string")) {
+      if(primaryMouseButtonDown && !inString) {
+        const debouncedPlay = debounce(play, 100, element.dataset.string);
+        debouncedPlay(element.dataset.string);
+        inString = true
+      }
+    } else {inString = false}
+    previousX = coalescedEvent.clientX
+  }
+});
+
+document.addEventListener("pointerdown", (e) => {
+  setPrimaryButtonState(e)
+  let element = document.elementFromPoint(e.clientX, e.clientY);
      // if string and coming from left
-     if(element.classList.contains("string") && coalescedEvent.clientX > previousX) {
+     if(element.classList.contains("string")) {
        const debouncedPlay = debounce(play, 100, element.dataset.string);
        debouncedPlay(element.dataset.string);
+       inString = true
      }
-     previousX = coalescedEvent.clientX
-   }
 });
+document.addEventListener("pointerup", setPrimaryButtonState);
