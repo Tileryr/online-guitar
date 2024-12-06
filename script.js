@@ -1,6 +1,5 @@
-const note_selector = document.querySelector(".notes_picker");
 const fretHolders = document.querySelectorAll(".fret-holder")
-const note_selectors = Array.from(note_selector.querySelectorAll("input"));
+
 const numberToNote = [
   "-E",
   "-F",
@@ -48,16 +47,26 @@ var fretNumbers = [
   0,
   0
 ]
+
 var timers = [...Array(6)]
+
+var stringData = [
+  { note: 0, fretNumber: 0, timer: undefined},
+  { note: 5, fretNumber: 0, timer: undefined},
+  { note: 10, fretNumber: 0, timer: undefined},
+  { note: 15, fretNumber: 0, timer: undefined},
+  { note: 19, fretNumber: 0, timer: undefined},
+  { note: 24, fretNumber: 0, timer: undefined},
+]
 
 function debounce(func, timeout, string) {
   return (...args) => {
-    if(!timers[string]) {
+    if(!stringData[string].timer) {
       func.apply(this, args)
 
-      clearTimeout(timers[string])
-      timers[string] = setTimeout(() => {
-      timers[string] = undefined
+      clearTimeout(stringData[string].timer)
+      stringData[string].timer = setTimeout(() => {
+      stringData[string].timer = undefined
       }, timeout)
     }
   }
@@ -78,12 +87,12 @@ function drawGrid() {
 }
 
 function chooseFret(fret, string) {
-  fretNumbers[string] = fret;
+  stringData[string].fretNumber = fret;
   let circle = document.createElement("div")
   let letter = document.createElement("span")
   circle.setAttribute("class", "fret_circle")
   letter.setAttribute("class", "text")
-  letter.textContent = "G"
+  letter.textContent = ""
   circle.append(letter)
   // Remove old ones
   let oldCircles = this.parentNode.querySelectorAll(".fret_circle")
@@ -94,26 +103,15 @@ function chooseFret(fret, string) {
 
 drawGrid();
 
-function mouseOverString(string) {
-  
-}
-
-function play(note, string) {
-  const fretNumber = fretNumbers[string];
-  let numberNote = +note + +fretNumber;
-  if(!numberToNote[note]) {return}
+function play(string) {
+  console.log(string)
+  const fretNumber = stringData[string].fretNumber;
+  const numberNote = stringData[string].note + fretNumber;
+  // if(!numberToNote[numberNote]) {return}
   const letterNote = numberToNote[numberNote];
-  console.log(letterNote)
+  // console.log(letterNote)
   const audio = new Audio(`./sounds/${encodeURIComponent(letterNote)}.ogg`);
   audio.play();
-}
-
-function saveChord() {
-  note_selectors.forEach((selector) => {
-    console.log(selector);
-    fretNumbers[selector.dataset.string] = selector.value;
-  });
-  // console.log(fretNumbers)
 }
 
 let previousX;
@@ -124,7 +122,7 @@ document.addEventListener("pointermove", (e) => {
      // if string and coming from left
      if(element.classList.contains("string") && coalescedEvent.clientX > previousX) {
        const debouncedPlay = debounce(play, 100, element.dataset.string);
-       debouncedPlay(element.dataset.note, element.dataset.string);
+       debouncedPlay(element.dataset.string);
      }
      previousX = coalescedEvent.clientX
    }
