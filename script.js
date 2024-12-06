@@ -40,7 +40,6 @@ const numberToNote = [
   "+D#",
   "++E",
 ]
-
 var fretNumbers = [
   0,
   2,
@@ -49,7 +48,23 @@ var fretNumbers = [
   0,
   0
 ]
-// rewriting fret code so flexbox for each string
+var timers = [...Array(6)]
+
+// writing debounce so ears stay healthy
+function debounce(func, timeout, string) {
+  console.log(timers)
+  return (...args) => {
+    if(!timers[string]) {
+      // console.log("did it")
+      func.apply(this, args)
+    }
+    clearTimeout(timers[string])
+    timers[string] = setTimeout(() => {
+      timers[string] = undefined
+    }, timeout)
+  }
+}
+
 function drawGrid() {
   fretHolders.forEach((fretHolder, index) => {
     for (let i = 0; i < 13; i++) {
@@ -85,7 +100,7 @@ function mouseOverString(string) {
   
 }
 
-function play(note, string) { 
+function play(note, string) {
   const fretNumber = fretNumbers[string];
   let numberNote = +note + +fretNumber;
   if(!numberToNote[note]) {return}
@@ -104,14 +119,14 @@ function saveChord() {
 }
 
 const strings = document.querySelectorAll(".string");
+
 document.addEventListener("pointermove", (e) => {
   const coalescedEvents = e.getCoalescedEvents();
   for (let coalescedEvent of coalescedEvents) {
     let element = document.elementFromPoint(coalescedEvent.clientX, coalescedEvent.clientY)
     if(element.classList.contains("string")) {
-      play(element.dataset.note, element.dataset.string)
-      break
+      const debouncedPlay = debounce(play, 100, element.dataset.string)
+      debouncedPlay(element.dataset.note, element.dataset.string)
     }
   }
 });
-// strings.forEach(string => string.addEventListener("pointerover", mouseOverString))
