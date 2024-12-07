@@ -1,4 +1,4 @@
-const fretHolders = document.querySelectorAll(".fret-holder")
+const fretHolders = Array.from(document.querySelectorAll(".fret-holder"))
 const canvases = Array.from(document.querySelectorAll("canvas"))
 const canvas = document.querySelector("canvas")
 // const ctx = canvas.getContext("2d")
@@ -41,6 +41,7 @@ const numberToNote = [
   "+D#",
   "++E",
 ]
+
 var stringData = [
   { note: 0, fretNumber: 0, timer: undefined, ctx: canvases[0].getContext("2d")},
   { note: 5, fretNumber: 0, timer: undefined, ctx: canvases[1].getContext("2d")},
@@ -49,7 +50,8 @@ var stringData = [
   { note: 19, fretNumber: 0, timer: undefined, ctx: canvases[4].getContext("2d")},
   { note: 24, fretNumber: 0, timer: undefined, ctx: canvases[5].getContext("2d")},
 ]
-
+var savedChords = Array.from({length: 9}, () => Array.from({length: 6}, () => 0))
+console.log(savedChords[5][3])
 var inString;
 var primaryMouseButtonDown = false;
 
@@ -117,19 +119,28 @@ function drawGrid() {
 }
 
 function chooseFret(fret, string) {
-  stringData[string].fretNumber = fret;
+  let stringInfo = stringData[string]
+  stringInfo.fretNumber = fret;
+
   let circle = document.createElement("div")
   let letter = document.createElement("span")
   circle.setAttribute("class", "fret_circle")
   letter.setAttribute("class", "text")
-  stringInfo = stringData[string]
-  console.log(numberToNote[stringInfo.note + stringInfo.fretNumber])
+  // console.log(numberToNote[stringInfo.note + stringInfo.fretNumber])
   letter.textContent = numberToNote[stringInfo.note + stringInfo.fretNumber].replace(/\+|-/g, "")
   circle.append(letter)
 
   let oldCircles = this.parentNode.querySelectorAll(".fret_circle")
   oldCircles.forEach(fretCircle => fretCircle.remove())
   this.append(circle)
+}
+
+function selectChord(chord) {
+  stringData.forEach((string, index) => {
+    var frets = fretHolders[index].children
+    var fret = frets.item(savedChords[chord][index])
+    chooseFret.call(fret, savedChords[chord][index], index)
+  })
 }
 
 function play(string) {
@@ -174,9 +185,4 @@ document.addEventListener("pointerup", setPrimaryButtonState);
 
 window.addEventListener("load", function() {
   drawGrid()
-  drawString(stringData[0].ctx)
 });
-
-setTimeout(function() {
-  drawString(stringData[1].ctx)
-}, 1000)
