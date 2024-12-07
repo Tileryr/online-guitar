@@ -1,4 +1,7 @@
 const fretHolders = document.querySelectorAll(".fret-holder")
+const canvases = Array.from(document.querySelectorAll("canvas"))
+const canvas = document.querySelector("canvas")
+// const ctx = canvas.getContext("2d")
 const numberToNote = [
   "-E",
   "-F",
@@ -39,15 +42,47 @@ const numberToNote = [
   "++E",
 ]
 var stringData = [
-  { note: 0, fretNumber: 0, timer: undefined},
-  { note: 5, fretNumber: 0, timer: undefined},
-  { note: 10, fretNumber: 0, timer: undefined},
-  { note: 15, fretNumber: 0, timer: undefined},
-  { note: 19, fretNumber: 0, timer: undefined},
-  { note: 24, fretNumber: 0, timer: undefined},
+  { note: 0, fretNumber: 0, timer: undefined, ctx: canvases[0].getContext("2d")},
+  { note: 5, fretNumber: 0, timer: undefined, ctx: canvases[1].getContext("2d")},
+  { note: 10, fretNumber: 0, timer: undefined, ctx: canvases[2].getContext("2d")},
+  { note: 15, fretNumber: 0, timer: undefined, ctx: canvases[3].getContext("2d")},
+  { note: 19, fretNumber: 0, timer: undefined, ctx: canvases[4].getContext("2d")},
+  { note: 24, fretNumber: 0, timer: undefined, ctx: canvases[5].getContext("2d")},
 ]
 
+var inString;
 var primaryMouseButtonDown = false;
+
+// FOR CANVAS
+const frequency = 0.5;
+
+function drawString(ctx, angle = 0, amplitude = 10) {
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2
+  const gradient = ctx.createLinearGradient(centerX, 0, centerX, canvas.height);
+  gradient.addColorStop(0, "transparent")
+  gradient.addColorStop(0.1, "black")
+  gradient.addColorStop(0.9, "black")
+  gradient.addColorStop(1, "transparent")
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const x = centerX + Math.sin(angle) * amplitude;
+
+  ctx.strokeStyle = gradient
+  ctx.lineWidth = 6
+  ctx.beginPath();
+  ctx.moveTo(centerX, 0);
+  ctx.quadraticCurveTo(x, centerY, centerX, canvas.height)
+  ctx.stroke()
+
+  angle += frequency;
+  amplitude -= frequency
+
+  if(amplitude > 0) {
+    requestAnimationFrame(function() {
+      drawString(ctx, angle, amplitude)
+    });
+  }
+}
 
 function setPrimaryButtonState(e) {
   var flags = e.buttons !== undefined ? e.buttons : e.which;
@@ -97,8 +132,6 @@ function chooseFret(fret, string) {
   this.append(circle)
 }
 
-drawGrid();
-
 function play(string) {
   const fretNumber = stringData[string].fretNumber;
   const numberNote = stringData[string].note + fretNumber;
@@ -106,10 +139,8 @@ function play(string) {
   console.log(letterNote)
   const audio = new Audio(`./sounds/${encodeURIComponent(letterNote)}.ogg`);
   audio.play();
+  drawString(stringData[string].ctx)
 }
-
-let previousX;
-let inString;
 
 document.addEventListener("pointermove", (e) => {
   setPrimaryButtonState(e)
@@ -138,4 +169,14 @@ document.addEventListener("pointerdown", (e) => {
        inString = true
      }
 });
+
 document.addEventListener("pointerup", setPrimaryButtonState);
+
+window.addEventListener("load", function() {
+  drawGrid()
+  drawString(stringData[0].ctx)
+});
+
+setTimeout(function() {
+  drawString(stringData[1].ctx)
+}, 1000)
