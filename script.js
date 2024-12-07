@@ -1,7 +1,7 @@
-const fretHolders = Array.from(document.querySelectorAll(".fret-holder"))
-const canvases = Array.from(document.querySelectorAll("canvas"))
-const canvas = document.querySelector("canvas")
-// const ctx = canvas.getContext("2d")
+const fretHolders = Array.from(document.querySelectorAll(".fret-holder"));
+const canvases = Array.from(document.querySelectorAll("canvas"));
+const canvas = document.querySelector("canvas");
+
 const numberToNote = [
   "-E",
   "-F",
@@ -50,8 +50,9 @@ var stringData = [
   { note: 19, fretNumber: 0, timer: undefined, ctx: canvases[4].getContext("2d")},
   { note: 24, fretNumber: 0, timer: undefined, ctx: canvases[5].getContext("2d")},
 ]
+
 var savedChords = Array.from({length: 9}, () => Array.from({length: 6}, () => 0))
-console.log(savedChords[5][3])
+var currentChord = 0;
 var inString;
 var primaryMouseButtonDown = false;
 
@@ -121,7 +122,6 @@ function drawGrid() {
 function chooseFret(fret, string) {
   let stringInfo = stringData[string]
   stringInfo.fretNumber = fret;
-
   let circle = document.createElement("div")
   let letter = document.createElement("span")
   circle.setAttribute("class", "fret_circle")
@@ -136,11 +136,23 @@ function chooseFret(fret, string) {
 }
 
 function selectChord(chord) {
-  stringData.forEach((string, index) => {
-    var frets = fretHolders[index].children
-    var fret = frets.item(savedChords[chord][index])
-    chooseFret.call(fret, savedChords[chord][index], index)
+  // SAVE CHORD
+  savedChords[currentChord].forEach((element, index, array) => {
+    array[index] = stringData[index].fretNumber
   })
+
+  currentChord = chord;
+
+  stringData.forEach((string, index) => {
+    var frets = fretHolders[index].children;
+    var fret = frets.item(savedChords[chord][index]);
+    chooseFret.call(fret, savedChords[chord][index], index);
+  })
+}
+
+function saveChord(chord) {
+  console.log(chord)
+  
 }
 
 function play(string) {
