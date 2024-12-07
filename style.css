@@ -61,11 +61,12 @@ body {
 .string {
     width: 15px;
     height: 400px;
-    background-color: black;
+    z-index: 5;
 }
 
 canvas {
-    border: black solid 2px;
+    position: relative;
+    z-index: -5;
 }
 /* .circle {
     width: 60px;

@@ -68,7 +68,7 @@ function drawString(ctx, angle = 0, amplitude = 10) {
   const x = centerX + Math.sin(angle) * amplitude;
 
   ctx.strokeStyle = gradient
-  ctx.lineWidth = 6
+  ctx.lineWidth = 12
   ctx.beginPath();
   ctx.moveTo(centerX, 0);
   ctx.quadraticCurveTo(x, centerY, centerX, canvas.height)
