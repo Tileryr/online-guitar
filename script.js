@@ -1,6 +1,5 @@
 const fretHolders = Array.from(document.querySelectorAll(".fret-holder"));
 const canvases = Array.from(document.querySelectorAll("canvas"));
-const canvas = document.querySelector("canvas");
 
 const numberToNote = [
   "-E",
@@ -60,12 +59,13 @@ var primaryMouseButtonDown = false;
 const frequency = 0.5;
 
 function drawString(ctx, angle = 0, amplitude = 10) {
+  const canvas = ctx.canvas
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2
   const gradient = ctx.createLinearGradient(centerX, 0, centerX, canvas.height);
   gradient.addColorStop(0, "transparent")
-  gradient.addColorStop(0.1, "black")
-  gradient.addColorStop(0.9, "black")
+  gradient.addColorStop(0.1, "#475f5c")
+  gradient.addColorStop(0.9, "#475f5c")
   gradient.addColorStop(1, "transparent")
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const x = centerX + Math.sin(angle) * amplitude;
@@ -85,6 +85,23 @@ function drawString(ctx, angle = 0, amplitude = 10) {
       drawString(ctx, angle, amplitude)
     });
   }
+}
+
+function initializeString(ctx) {
+  const canvas = ctx.canvas
+  const centerX = canvas.width / 2;
+  const gradient = ctx.createLinearGradient(centerX, 0, centerX, canvas.height);
+  gradient.addColorStop(0, "transparent")
+  gradient.addColorStop(0.1, "#475f5c")
+  gradient.addColorStop(0.9, "#475f5c")
+  gradient.addColorStop(1, "transparent")
+
+  ctx.strokeStyle = gradient
+  ctx.lineWidth = 12
+  ctx.beginPath();
+  ctx.moveTo(centerX, 0);
+  ctx.lineTo(centerX, canvas.height)
+  ctx.stroke()
 }
 
 function setPrimaryButtonState(e) {
@@ -209,4 +226,5 @@ document.addEventListener("keydown", e => {
 window.addEventListener("load", function() {
   drawGrid()
   selectChord(0)
+  stringData.forEach(dataset => {initializeString(dataset.ctx)})
 });

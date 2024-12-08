@@ -86,10 +86,13 @@ button {
 
 canvas {
     left: 50%;
+    top: 50%;
     transform: translateX(-50%);
+    transform: translateY(-50%);
     position: relative;
     z-index: -1;
 }
+
 /* .circle {
     width: 60px;
     height: 60px;
