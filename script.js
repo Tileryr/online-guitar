@@ -114,25 +114,31 @@ function drawGrid() {
       div.setAttribute("id", `fret_${i}`);
       div.setAttribute("class", "fret");
       fretHolder.append(div);
-      div.addEventListener("mousedown", chooseFret.bind(div, fretNumber, string));
+      div.addEventListener("mousedown", chooseFret.bind(div, fretNumber, string, false));
     }
   });
 }
 
-function chooseFret(fret, string) {
-  let stringInfo = stringData[string]
-  stringInfo.fretNumber = fret;
-  let circle = document.createElement("div")
-  let letter = document.createElement("span")
-  circle.setAttribute("class", "fret_circle")
-  letter.setAttribute("class", "text")
-  // console.log(numberToNote[stringInfo.note + stringInfo.fretNumber])
-  letter.textContent = numberToNote[stringInfo.note + stringInfo.fretNumber].replace(/\+|-/g, "")
-  circle.append(letter)
+function chooseFret(fret, string, ignore = false) {
+  let stringInfo = stringData[string];
+  let oldCircles = this.parentNode.querySelectorAll(".fret_circle");
 
-  let oldCircles = this.parentNode.querySelectorAll(".fret_circle")
-  oldCircles.forEach(fretCircle => fretCircle.remove())
-  this.append(circle)
+  if(stringInfo.fretNumber === fret && !ignore || ignore && fret === undefined) {
+    console.log("what")
+    stringInfo.fretNumber = undefined
+    oldCircles.forEach(fretCircle => fretCircle.remove());
+  } else {
+    stringInfo.fretNumber = fret
+    let circle = document.createElement("div");
+    let letter = document.createElement("span");
+    circle.setAttribute("class", "fret_circle");
+    letter.setAttribute("class", "text");
+    letter.textContent = numberToNote[stringInfo.note + stringInfo.fretNumber].replace(/\+|-/g, "");
+
+    oldCircles.forEach(fretCircle => fretCircle.remove());
+    circle.append(letter);
+    this.append(circle);
+  }
 }
 
 function selectChord(chord) {
@@ -146,15 +152,16 @@ function selectChord(chord) {
   stringData.forEach((string, index) => {
     var frets = fretHolders[index].children;
     var fret = frets.item(savedChords[chord][index]);
-    chooseFret.call(fret, savedChords[chord][index], index);
+    chooseFret.call(fret, savedChords[chord][index], index, true);
   })
 }
 
 function play(string) {
   const fretNumber = stringData[string].fretNumber;
+  if(fretNumber === undefined) {return}
   const numberNote = stringData[string].note + fretNumber;
   const letterNote = numberToNote[numberNote];
-  console.log(letterNote)
+
   const audio = new Audio(`./sounds/${encodeURIComponent(letterNote)}.ogg`);
   audio.play();
   drawString(stringData[string].ctx)
@@ -201,4 +208,5 @@ document.addEventListener("keydown", e => {
 })
 window.addEventListener("load", function() {
   drawGrid()
+  selectChord(0)
 });
