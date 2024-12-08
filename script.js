@@ -43,12 +43,12 @@ const numberToNote = [
 ]
 
 var stringData = [
-  { note: 0, fretNumber: 0, timer: undefined, ctx: canvases[0].getContext("2d")},
-  { note: 5, fretNumber: 0, timer: undefined, ctx: canvases[1].getContext("2d")},
-  { note: 10, fretNumber: 0, timer: undefined, ctx: canvases[2].getContext("2d")},
-  { note: 15, fretNumber: 0, timer: undefined, ctx: canvases[3].getContext("2d")},
-  { note: 19, fretNumber: 0, timer: undefined, ctx: canvases[4].getContext("2d")},
-  { note: 24, fretNumber: 0, timer: undefined, ctx: canvases[5].getContext("2d")},
+  { note: 0, fretNumber: 0, timer: undefined, ctx: canvases[0].getContext("2d"), key: "s"},
+  { note: 5, fretNumber: 0, timer: undefined, ctx: canvases[1].getContext("2d"), key: "d"},
+  { note: 10, fretNumber: 0, timer: undefined, ctx: canvases[2].getContext("2d"), key: "f"},
+  { note: 15, fretNumber: 0, timer: undefined, ctx: canvases[3].getContext("2d"), key: "j"},
+  { note: 19, fretNumber: 0, timer: undefined, ctx: canvases[4].getContext("2d"), key: "k"},
+  { note: 24, fretNumber: 0, timer: undefined, ctx: canvases[5].getContext("2d"), key: "l"},
 ]
 
 var savedChords = Array.from({length: 9}, () => Array.from({length: 6}, () => 0))
@@ -150,11 +150,6 @@ function selectChord(chord) {
   })
 }
 
-function saveChord(chord) {
-  console.log(chord)
-  
-}
-
 function play(string) {
   const fretNumber = stringData[string].fretNumber;
   const numberNote = stringData[string].note + fretNumber;
@@ -181,7 +176,6 @@ document.addEventListener("pointermove", (e) => {
     previousX = coalescedEvent.clientX
   }
 });
-
 document.addEventListener("pointerdown", (e) => {
   setPrimaryButtonState(e)
   let element = document.elementFromPoint(e.clientX, e.clientY);
@@ -192,9 +186,19 @@ document.addEventListener("pointerdown", (e) => {
        inString = true
      }
 });
-
 document.addEventListener("pointerup", setPrimaryButtonState);
-
+document.addEventListener("keydown", e => {
+  let key = e.key
+  if(/^[1-9]$/i.test(key)) {
+    selectChord(key-1)
+  } else {
+    stringData.forEach((dataset, index) => {
+      if(dataset.key == key) {
+        play(index)
+      }
+    })
+  }
+})
 window.addEventListener("load", function() {
   drawGrid()
 });
