@@ -85,6 +85,8 @@ button {
 }
 
 canvas {
+    left: 50%;
+    transform: translateX(-50%);
     position: relative;
     z-index: -1;
 }
