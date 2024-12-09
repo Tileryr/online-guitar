@@ -11,7 +11,6 @@
 </head>
 <body ondragstart="return false;" ondrop="return false;">
     <div class="website">
-
         <div class="fretboard">
             <div class="fret-holder"></div>
             <div class="fret-holder"></div>
@@ -19,6 +18,30 @@
             <div class="fret-holder"></div>
             <div class="fret-holder"></div>
             <div class="fret-holder"></div>
+        </div>
+        
+        <div class="string_wrapper">
+            <div class="strings">
+                <div class="string" data-string=0>
+                    <canvas height="320" width="30" class="small"></canvas>
+                </div>
+                <div class="string" data-string=1 class="mid">
+                    <canvas height="380" width="30"></canvas>
+                </div>
+                <div class="string" data-string=2 class="big">
+                    <canvas height="400" width="30"></canvas>
+                </div>
+                <div class="string" data-string=3 class="big">
+                    <canvas height="400" width="30"></canvas>
+                </div>
+                <div class="string" data-string=4 class="mid">
+                    <canvas height="380" width="30"></canvas>
+                </div>
+                <div class="string" data-string=5 class="small">
+                    <canvas height="320" width="30"></canvas>
+                </div>
+            </div>
+            <div class="string_circle"></div>
         </div>
 
         <div class="chord_picker">
@@ -32,27 +55,6 @@
             <button onclick="selectChord(6)" class="selector" data-selector="7">7</button>
             <button onclick="selectChord(7)" class="selector" data-selector="8">8</button>
             <button onclick="selectChord(8)" class="selector" data-selector="9">9</button>
-        </div>
-
-        <div class="strings">
-            <div class="string" data-string=0>
-                <canvas height="320" width="30" class="small"></canvas>
-            </div>
-            <div class="string" data-string=1 class="mid">
-                <canvas height="380" width="30"></canvas>
-            </div>
-            <div class="string" data-string=2 class="big">
-                <canvas height="400" width="30"></canvas>
-            </div>
-            <div class="string" data-string=3 class="big">
-                <canvas height="400" width="30"></canvas>
-            </div>
-            <div class="string" data-string=4 class="mid">
-                <canvas height="380" width="30"></canvas>
-            </div>
-            <div class="string" data-string=5 class="small">
-                <canvas height="320" width="30"></canvas>
-            </div>
         </div>
     </div>
     <script src="script.js"></script>

@@ -17,8 +17,8 @@ body {
     justify-items: center;
 }
 /* FRETBOARD */
-
 .fretboard {
+    width: 200px;
     align-self: stretch;
     justify-self: center;
     display: grid;
@@ -42,7 +42,7 @@ body {
 }
 
 .fret:first-child {
-    background-color: #c98459;
+    background-color: #ac6545;
     border-bottom: solid #ddac81 16px
 }
 
@@ -104,8 +104,13 @@ input[type='radio'][name='buttonGroup'] { display:none; }
     color: #d4b25b;
     background-color: #553e28;
 }
-/* STRING */
+/* STRINGS */
+.string_wrapper {
+    display: grid;
+}
+
 .strings {
+    grid-area: 1 / 1 / 1 / 1;
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: repeat(6, auto);
@@ -116,22 +121,26 @@ input[type='radio'][name='buttonGroup'] { display:none; }
 .string {
     width: 15px;
     height: 400px;
-    z-index: 5;
+}
+
+.string_circle {
+    grid-area: 1 / 1 / 1 / 1;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); 
+    width: 125%;
+    height: 0;
+    padding-bottom: 125%;
+    z-index: -2;
+    border-radius: 50%;
+    background-color: #ddac817c;
 }
 
 canvas {
+    position: relative;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%);
-    transform: translateY(-50%);
-    position: relative;
+    transform: translate(-50%, -50%);
     z-index: -1;
 }
-
-/* .circle {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: rgba(100, 100, 100, 100);
-    grid-column: 1 / -1;
-} */
