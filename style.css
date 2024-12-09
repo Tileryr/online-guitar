@@ -17,12 +17,13 @@ body {
     justify-items: center;
 }
 /* FRETBOARD */
+
 .fretboard {
     align-self: stretch;
-    justify-self: stretch;
+    justify-self: center;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    background-color:salmon;
+    background-color: #673536;
 }
 
 .fret-holder {
@@ -37,13 +38,19 @@ body {
     align-items: center;
     justify-content: center;
     color: gray;
-    border-bottom: solid black 2px;
+    border-bottom: solid #eccfa8 4px;
+}
+
+.fret:first-child {
+    background-color: #c98459;
+    border-bottom: solid #ddac81 16px
 }
 
 .fret_circle {
-    background-color: red;
-    width: 20px;
-    height: 20px;
+    background-color: #f27947;
+    width: 25px;
+    height: 25px;
+    margin: 2px;
     border-radius: 50%;
     display: grid;
     justify-content: center;
@@ -51,6 +58,7 @@ body {
 }
 
 .text {
+    font-size: 1.25rem;
     color: white;
 }
 /* CHORD PICKER */
