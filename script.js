@@ -1,4 +1,5 @@
 const fretHolders = Array.from(document.querySelectorAll(".fret-holder"));
+const chordSelectors = Array.from(document.querySelectorAll(".selector"));
 const canvases = Array.from(document.querySelectorAll("canvas"));
 
 const numberToNote = [
@@ -48,9 +49,9 @@ var stringData = [
   { note: 15, fretNumber: 0, timer: undefined, ctx: canvases[3].getContext("2d"), key: "j"},
   { note: 19, fretNumber: 0, timer: undefined, ctx: canvases[4].getContext("2d"), key: "k"},
   { note: 24, fretNumber: 0, timer: undefined, ctx: canvases[5].getContext("2d"), key: "l"},
-]
+];
 
-var savedChords = Array.from({length: 9}, () => Array.from({length: 6}, () => 0))
+var savedChords = Array.from({length: 9}, () => Array.from({length: 6}, () => 0));
 var currentChord = 0;
 var inString;
 var primaryMouseButtonDown = false;
@@ -158,7 +159,7 @@ function chooseFret(fret, string, ignore = false) {
   }
 }
 
-function selectChord(chord) {
+function selectChord(chord, selector) {
   // SAVE CHORD
   savedChords[currentChord].forEach((element, index, array) => {
     array[index] = stringData[index].fretNumber
@@ -171,6 +172,9 @@ function selectChord(chord) {
     var fret = frets.item(savedChords[chord][index]);
     chooseFret.call(fret, savedChords[chord][index], index, true);
   })
+
+  chordSelectors.forEach(selector => {selector.classList.remove("selected")})
+  chordSelectors[chord].classList.add("selected")
 }
 
 function play(string) {
